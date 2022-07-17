@@ -15,6 +15,10 @@ class Settings(pydantic.BaseSettings):
     subscription_worker_exchange: str = "subscription_management"
     subscription_worker_queue: str
 
+    saga_amqp_uri: str
+    saga_exchange: str = "saga"
+    saga_queue: str
+
 
 if os.getenv("DEBUG", "0") == "1":
     try:

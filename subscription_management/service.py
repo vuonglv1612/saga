@@ -2,8 +2,8 @@ from uuid import uuid4
 
 import pydantic
 
-from .model import CreateSubscriptionSagaState, Subscription
-from .repo import CreateSubscriptionSagaStateRepo, SubscriptionRepository
+from .model import Subscription
+from .repo import SubscriptionRepository
 
 
 class CreateSubscriptionCommand(pydantic.BaseModel):
@@ -44,15 +44,3 @@ class SubscriptionService:
         sub.reject()
         self.subscription_repository.update(sub)
         return sub
-
-
-class CreateSubscriptionSaga:
-    def __init__(
-        self,
-        subscription_service: SubscriptionService,
-        create_sub_state_repository: CreateSubscriptionSagaStateRepo,
-    ):
-        self.subscription_service = subscription_service
-        self.state_repo = create_sub_state_repository
-
-    # TODO: implement
