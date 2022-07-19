@@ -15,5 +15,5 @@ class RabbitMQPublisher:
             exchange=exchange, routing_key=queue, body=json.dumps(message)
         )
         print(" [x] Sent %r" % message)
-        self._connection.close()
+        self._channel.close()
         return True

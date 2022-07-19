@@ -74,20 +74,22 @@ def main():
         pika.URLParameters(settings.account_worker_amqp_uri)
     )
     publisher_connection = pika.BlockingConnection(
-        pika.URLParameters(settings.account_worker_amqp_uri)
+        pika.URLParameters(settings.saga_amqp_uri)
     )
     publisher = RabbitMQPublisher(publisher_connection)
-    worker = RabbitmqWorker(connection, settings.account_worker_exchange, settings.account_worker_queue)
+    worker = RabbitmqWorker(connection, settings.saga_exchange, settings.saga_queue)
     worker.register_callback(
         "deposit_account_balance",
-        deposit_account_balance_factory(publisher, "something", "somequeue"),
+        deposit_account_balance_factory(
+            publisher, settings.saga_exchange, settings.saga_queue
+        ),
     )
     worker.register_callback(
         "withdraw_account_balance",
         withdraw_account_balance_factory(
             publisher,
-            settings.account_withdraw_response_exchange,
-            settings.account_withdraw_response_queue,
+            settings.saga_exchange,
+            settings.saga_queue,
         ),
     )
     worker.start()
